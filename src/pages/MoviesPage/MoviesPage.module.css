@@ -1,0 +1,11 @@
+.movieContainer {
+  display: flex;
+}
+
+.mainContainer {
+  padding: 10px;
+}
+
+.list {
+  list-style: none;
+}
