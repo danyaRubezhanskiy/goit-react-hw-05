@@ -1,0 +1,20 @@
+.movieContainer {
+  display: flex;
+}
+
+.mainContainer {
+  padding: 10px;
+}
+
+.list {
+  list-style: none;
+}
+
+.linkList {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 0px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  gap: 7px;
+}

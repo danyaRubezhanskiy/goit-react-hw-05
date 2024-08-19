@@ -1,16 +1,27 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import css from "./MoviesPage.module.css";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
-const MoviesPage = () => {
-  const { moviesId } = useParams();
-  const [movieData, setMovieData] = useState([]);
+export const MoviesPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [movies, setMovies] = useState([]);
+  const query = searchParams.get("query") || "";
+
+  const handleInputChange = (e) => {
+    const newQuery = e.target.value;
+    setSearchParams({ query: newQuery });
+  };
 
   useEffect(() => {
-    const fetchSingleMovie = async () => {
+    const fetchMovies = async () => {
+      if (query.trim() === "") {
+        setMovies([]);
+        return;
+      }
+
       try {
-        const url = `https://api.themoviedb.org/3/movie/${moviesId}?language=en-US`;
+        const url = `https://api.themoviedb.org/3/search/movie?query=${query}&language=en-US&page=1`;
 
         const options = {
           headers: {
@@ -18,40 +29,35 @@ const MoviesPage = () => {
               "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxOGIyMTA1OGYzNGIyZDViM2MwNDkyZWRlMTVkNDJmNiIsIm5iZiI6MTcyMzk4OTcxMy41MDc0ODQsInN1YiI6IjY2YzFjZjAzZTUwNTA5NDZkMTFhODk3YyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.y2QK3_O7efI9PeuhyxTWekul6jfBj3ijfLsGJ6Gnp3w",
           },
         };
+
         const { data } = await axios.get(url, options);
-        console.log(data);
-        setMovieData(data);
+        setMovies(data.results);
       } catch (err) {
-        console.error("Error:", err);
+        console.error("Error fetching movie data:", err);
       }
     };
 
-    fetchSingleMovie();
-  }, [moviesId]);
+    fetchMovies();
+  }, [query]);
 
   return (
-    <div className={css.mainContainer}>
-      <button>Go back</button>
-      <div className={css.movieContainer}>
-        <img
-          src={`https://image.tmdb.org/t/p/w500${movieData.poster_path}`}
-          alt={movieData.original_title}
-          width={300}
-          height={450}
+    <div>
+      <form onSubmit={(e) => e.preventDefault()}>
+        <input
+          type="text"
+          value={query}
+          onChange={handleInputChange}
+          placeholder="Search for a movie..."
         />
+        <button type="submit">Search</button>
+      </form>
+      <div>
         <ul className={css.list}>
-          <li>
-            <h2>{movieData.original_title}</h2>
-            <p>User Score: {Math.round(movieData.popularity / 100)}%</p>
-          </li>
-          <li>
-            <h2>Overview</h2>
-            <p>{movieData.overview}</p>
-          </li>
-          <li>
-            <h2>Genres</h2>
-            <p>dfsaf</p>
-          </li>
+          {movies.map((movie) => (
+            <li key={movie.id}>
+              <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

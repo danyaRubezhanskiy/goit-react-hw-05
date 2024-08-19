@@ -1,11 +1,6 @@
-.movieContainer {
-  display: flex;
-}
-
-.mainContainer {
-  padding: 10px;
-}
-
 .list {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
