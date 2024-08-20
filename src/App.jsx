@@ -3,18 +3,16 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import axios from "axios";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const Navigation = lazy(() =>
-  import("./pages/components/Navigation/Navigation")
-);
-const MovieCast = lazy(() => import("./pages/components/MovieCast/MovieCast"));
+const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
 const MovieReviews = lazy(() =>
-  import("./pages/components/MovieReviews/MovieReviews")
+  import("./components/MovieReviews/MovieReviews")
 );
 const MoviesPage = lazy(() => import("./pages/MoviesPage/MoviesPage"));
 const MovieDetailsPage = lazy(() =>
   import("./pages/MovieDetailsPage/MovieDetailsPage")
 );
-const NotFoundPage = lazy(() => import("./pages/components/NotFoundPage"));
+const NotFoundPage = lazy(() => import("./components/NotFoundPage"));
 
 function App() {
   const [movies, setMovies] = useState([]);
