@@ -2,6 +2,7 @@ import axios from "axios";
 import css from "./MoviesPage.module.css";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+import MovieList from "../../components/MovieList/MovieList";
 
 export const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -51,15 +52,7 @@ export const MoviesPage = () => {
         />
         <button type="submit">Search</button>
       </form>
-      <div>
-        <ul className={css.list}>
-          {movies.map((movie) => (
-            <li key={movie.id}>
-              <Link to={`/movies/${movie.id}`}>{movie.original_title}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <MovieList movies={movies}></MovieList>
     </div>
   );
 };

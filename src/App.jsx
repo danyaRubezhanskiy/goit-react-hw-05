@@ -3,7 +3,7 @@ import { Suspense, lazy, useEffect, useState } from "react";
 import axios from "axios";
 
 const HomePage = lazy(() => import("./pages/HomePage/HomePage"));
-const Navigation = lazy(() => import("./components/Navigation/Navigation"));
+const Navigation = lazy(() => import("./components/Navigations/Navigations"));
 const MovieCast = lazy(() => import("./components/MovieCast/MovieCast"));
 const MovieReviews = lazy(() =>
   import("./components/MovieReviews/MovieReviews")
@@ -43,25 +43,53 @@ function App() {
   return (
     <div>
       <header>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Navigation />
-        </Suspense>
+        <Navigation />
       </header>
       <main>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<HomePage movies={movies} />} />
-            <Route path="/movies" element={<MoviesPage />} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <HomePage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/movies"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MoviesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/movies/:moviesId"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MovieDetailsPage url={url} options={options} />
+              </Suspense>
+            }
+          >
             <Route
-              path="/movies/:moviesId"
-              element={<MovieDetailsPage url={url} options={options} />}
-            >
-              <Route path="cast" element={<MovieCast />} />
-              <Route path="reviews" element={<MovieReviews />} />
-            </Route>
-            <Route path="*" element={<NotFoundPage />} />{" "}
-          </Routes>
-        </Suspense>
+              path="cast"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <MovieCast />
+                </Suspense>
+              }
+            />
+            <Route
+              path="reviews"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <MovieReviews />
+                </Suspense>
+              }
+            />
+          </Route>
+          <Route path="*" element={<NotFoundPage />} />{" "}
+        </Routes>
       </main>
     </div>
   );
